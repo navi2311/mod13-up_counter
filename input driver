@@ -1,0 +1,51 @@
+//input driver
+class counter_input_driver extends uvm_driver#(couter_txn);
+  
+  //factory
+  'uvm_component_utils(counter_input_driver)
+  function new(string name ="counter_input_driver",uvm_component parent);
+    super.new(name,parent);
+  endfunction
+  
+  //virtual interface handle to poin to dut
+  virtual counter_inf.DRIVER drv_inf;          //.DRIVER why??????
+  
+  //txn handle to send it to dut
+  counter_txn dut_packet;
+  
+  //conf handle to get interface
+  counter_config m_cfg;
+  
+  //build phase
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if(!uvm_config_db#(counter_config)::set(this,"","counter_config",m_cfg);
+       'uvm_fatal("config","cant get ")
+  endfunction:build_phase
+       
+  //connect phase 
+       function void connect_phase(uvm_phase phase);
+         drv_inf=m_cfg.vif;
+       endfunction
+       
+       //run_phase
+       task run_phase(uvm_phase phase);
+         forever
+           begin
+             
+         //get the next data item from seqr
+             seq_item_port.get_next_item(req);
+             
+         //execute the item-----send item to dut 
+             send_2_dut;
+         //item_done
+             seq_item_port.item_done();
+           end
+       endtask
+       virtual task send2dut(counter_txn dut_packet);
+         @(drv_inf.driver.cb)
+         drv_inf.driver.cb.data_in<=dut_packet.data_in;
+         drv_inf.driver.cb.rst_in<=dut_packet.rst; 
+         drv_inf.driver.cb.load_in<=dut_packet.load; 
+       endtask
+endclass
