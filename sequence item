@@ -1,0 +1,15 @@
+// Code your design here
+//sequence item
+class couter_txn extends uvm_sequence_item;
+  rand logic data_in;
+  rand logic load;
+  rand logic rst;
+  logic[3:0]data_out;
+  //static int no_of_txn;
+  
+  'uvm_object_utils(counter_txn)
+  function new (string name ="counter_txn");
+    super.new(name)
+  endfunction
+  //methods
+endclass
