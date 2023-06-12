@@ -1,0 +1,19 @@
+//configuration class
+class counter_config extends uvm_object;
+  'uvm_object_utils(counter_config)
+  //input agent
+  bit has_input_agent;
+  //interface
+  virtual counter_inf vif;
+  //output agent 
+  bit has_output_agent;
+  //passive or active input agent
+  uvm_active_passive_enum input_agent_is_active;
+  //passive or active output agent
+  uvm_active_passive_enum output_agent_is_active;
+  //scoreboard
+  bit has_scorebaord;
+  function new(string name ="counter_config");
+    super.new(name);
+  endfunction
+endclass
