@@ -1,0 +1,7 @@
+//seqr
+class counter_int_seqr extends uvm_sequencer#(couter_txn );
+  'uvm_component_utils(counter_int_seqr )
+  function new(string name ="counter_int_seqr",uvm_component parent);
+    super.new(name,parent);
+  endfunction
+endclass
