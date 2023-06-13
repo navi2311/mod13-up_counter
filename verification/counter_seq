@@ -1,0 +1,17 @@
+class counter_seq extends uvm_sequence#(counter_trans);
+  'uvm_object_utils(counter_seq)
+  function new (string name ="counter_env");
+    super.new(name,parent);
+  endfunction
+  
+  task body();
+    repeat(number of transcations)
+      begin
+        req=counter_trx::type_id::create("req",this);
+        start_item(req);
+        assert(req.randomize());
+        finish_item(req);
+      end
+    endtask
+    endclass
+  
