@@ -46,6 +46,11 @@ class counter_input_monitor extends uvm_monitor;
     dut2mon.load<=mon_if.input_mon_cb.load;
     dut2mon.data_in<=mon_if.input_mon_cb.data_in;
     dut2mon.data_out<=mon_if.input_mon_cb.rst;
+    //some message
+    'uvm_info(get_type_name,$sformatf("input moniotor has captured",dut2mon.sprint()),UVM_MEDIUM)
+    
+    //writwe method
+    mon_port.write(dut2mon);
   endtask
     
 endclass
