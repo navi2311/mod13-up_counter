@@ -18,12 +18,36 @@ class counter_output_monitor extends uvm_monitor;
   
 //port
   uvm_analysis_port#(counter_txn) output_mon_port;
-//build phase
-//is_active 0r passive
-  
-//connections
+
+  //build phase
+	//is_active 0r passive
+  function void build_phase(string name ="counter_output_monitor",uvm_component parent);
+    super.build_phase(phase);
+    if(!uvm_config_db#(counter_config)::get(this,"","counter_config",m_cfg))
+      'uvm_fatal(get_type_name,"could not get db")
+      output_mon_port=new("output_mon_port",this)
+  endfunction
+
 
 //connect
+      functionvoid connect_phase(uvm_phase phase);
+    	mon_if=m_cfg.vif;
+  endfunction
 
 //run
+  task run_phase(uvm_phase phase);
+    @(mon_if.mon_cb);
+    forever
+      begin
  //monitor the signals from dut
+        monitor();
+      end
+        endtask
+  //logic for monitoring
+  task monitor();
+    data_out2mon=counter_txn::type_id::create("data_out_mon",this);                  //creare memory 
+    @(mon_if.mon_cb);
+    data_out2mon.data_out<=mon_if.mon_cb.data_out;															
+     'uvm_info(get_type_name,$sformatf("input moniotor has captured",dut2mon.sprint()),UVM_MEDIUM)
+    
+  endtask
