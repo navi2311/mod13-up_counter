@@ -1,0 +1,51 @@
+//Monitor
+class counter_input_monitor extends uvm_monitor;
+  
+  //factory registration
+  'uvm_component_utils(counter_input_monitor);
+  function new (string name =counter_input_monitor,uvm_component parent);
+    super.new(name,parent);
+  endfunction
+  
+  //declaring handles
+  	
+  virtual counter_if.INPUT_MON mon_if;
+  
+  counter_txn dut2mon;
+  
+  counter_config m_cfg;
+  
+  //declaring port
+  uvm_analysis_port#(counter_txn) mon_port;
+  //build phase
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if(!uvm_config_db#(counter_config)::get(this,"","counter_config",m_cfg));
+    'uvm_fatal(get_type_name,"couldn't get db")
+    mon_port=new("mon_port",this);
+  endfunction
+  
+  //connect phase
+  function void connect_phase(uvm_phase phase);
+    mon_if=m_cfg.vif;
+  endfunction
+  
+  //run
+  task run_phase(uvm_phase phase);
+    @(mon_if.input_mon_cb);
+    forever
+      
+  	//monitor the dut info
+      monitor();
+  endtask
+  
+  //monitor logic
+  task monitor();
+    @(mon_if.input_mon_cb);
+    dut2mon=counter_txn::type_id::create("dut2mon",this);
+    dut2mon.load<=mon_if.input_mon_cb.load;
+    dut2mon.data_in<=mon_if.input_mon_cb.data_in;
+    dut2mon.data_out<=mon_if.input_mon_cb.rst;
+  endtask
+    
+endclass
