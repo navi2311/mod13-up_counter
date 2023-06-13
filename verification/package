@@ -1,0 +1,19 @@
+//package
+package counter_pkg;
+int number_of_transactions=100;
+import uvm_pkg::*;
+//include all the files +macros
+'include "uvm_macros.svh"
+'include "counter_txn.sv"
+'include "counter_env.sv"
+'include "counter_input_driver.sv"
+'include "counter_input_monitor.sv"
+'include "counter_int_seqr.sv"
+'include "counter_input_agent.sv"
+'include "counter_output_monitor.sv"
+'include "counter_output_agent.sv"
+'include "counter_sb.sv"
+'include "counter_seq.sv"
+'include "counter_config.sv"
+'include "counter_base_test.sv"
+endpackage
