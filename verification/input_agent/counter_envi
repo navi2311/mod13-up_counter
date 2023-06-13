@@ -1,0 +1,37 @@
+//Environment
+class counter_envi extends uvm_environment;
+  'uvm_component_utils(counter_env)
+  function new (string name ="counter_env",uvm_component parent);
+    super.new(name,parent);
+  endfunction
+  
+  //hanldes
+     counter_input_agent  agent1;
+  	 counter_output_agent agent2;
+  		counter_config m_cfg;
+  		counter_sb sbh;
+  //build phase
+  function void buiod_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if(!uvm_config_db#(counter_config)::get(this,"","counter_config",m_cfg))
+     
+     'uvm_fatal("could not get db")
+     
+      //agent 
+      if(m_cfg.has_input_agent)
+        agent1=counter_input_agent::type_id::create("agent1",this);
+    if(m_cfg.has_output_agent)
+      agent2=counter_output_agent::type_id::create("agent1",this);
+    //scoreboard
+    if(m_cfg.has_scoreboard)
+      sbh=counter_sb::type_id::create("sbh",this);
+  endfunction
+  
+  //connect phase
+  function void connect_phase(uvm_phase phase);
+    uvm_top.print_topology();
+    if(m_cfg.has_input_agent && m_cfg.has_scoreboard)
+      agent1.monh.monitor_port.connect(sbh.input_mon_fifo.analysis_export);     //agent handle--monitor handle ----monitor port.connect--sb handle---sb port name---analysis export
+  endfunction
+endclass
+    
