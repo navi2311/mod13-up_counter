@@ -1,0 +1,33 @@
+//top module
+module counter_top();
+  
+  //import package
+  import counter_package::*;
+  import uvm_pkg::*;
+  
+  parameter cycle=10;
+  //componets in top modules 
+  reg clock;
+  counter_if DUT_inf(clock);
+  counter DUT(.clock(clock)
+              .rst(DUT_inf.rst)
+              .load(DUT_inf.load)
+              .data_in(DUT_inf.data_in)
+              .dataout(DUT_inf.data_out));
+  
+  
+  initial
+    begin
+      uvm_config_db#(virtual counter_inf)::set(null,"*","vif",DUT_INF)
+      run_test();
+    end
+  
+  
+  //gemnrate clk
+  initial
+    begin
+      clock=1'b0;
+      forever
+        #(cycle/2) clk=~clk;
+    end
+endmodule
