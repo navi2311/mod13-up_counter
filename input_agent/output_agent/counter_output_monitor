@@ -1,0 +1,29 @@
+//output monitor
+class counter_output_monitor extends uvm_monitor;
+  
+//factory
+  'uvm_component_utils(counter_output_monitor)
+  function new(string name ="counter_output_monitor",uvm_component parent);
+    super.new(name,parent);
+  endfunction
+  
+//handle names
+  counter_config m_cfg;
+  
+  //handle for virtual interface
+  counter_if.OUTPUT_MON mon_if;
+  
+  //txn handle 
+  counter_txn data_out2mon;
+  
+//port
+  uvm_analysis_port#(counter_txn) output_mon_port;
+//build phase
+//is_active 0r passive
+  
+//connections
+
+//connect
+
+//run
+ //monitor the signals from dut
