@@ -1,0 +1,49 @@
+//Interface
+interface counter_if(input bit clock);
+  
+  
+  //signals
+  logic load;
+  logic [3:0]data_in;
+  logic [3:0]data_out;
+  logic rst;
+  
+  
+  //clocking blocks
+  
+  
+  //clocking blocks input_driver
+  clocking driver_cb@(posedge clock);
+    
+    //input skew,output skew
+    
+    default input #1 output #1;
+    output rst;
+    output data_in;
+    output dat
+    a_out;
+  endclocking
+  
+  //clocking blocks input_monitor
+  
+  clocking input_mon_cb@(posedge clock);
+  default input #1 output#1;
+    input data_in;
+    input data_out;
+    input rst;
+  endclocking
+  
+  //clocking blocks output_monitor
+  clocking mon_cb@(posedge clock);
+    input data_out;
+  endclocking
+  
+  //modports
+  //driver modport
+  modport DRIVER(clocking driver_cb);
+    
+  //input_monitor_modport
+    modport INPUT_MON(clocking input_mon_cb);
+  //output_monitor_modport
+      modport OUTPUT_MON(clocking mon_cb);
+endinterface
