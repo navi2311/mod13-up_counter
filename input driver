@@ -8,7 +8,7 @@ class counter_input_driver extends uvm_driver#(couter_txn);
   endfunction
   
   //virtual interface handle to poin to dut
-  virtual counter_inf.DRIVER drv_inf;          //.DRIVER why??????
+  virtual counter_inf.DRIVER drv_inf;          //driver interface handle is pointing to modport of  input driver in interface
   
   //txn handle to send it to dut
   counter_txn dut_packet;
@@ -43,7 +43,7 @@ class counter_input_driver extends uvm_driver#(couter_txn);
            end
        endtask
        virtual task send2dut(counter_txn dut_packet);
-         @(drv_inf.driver.cb)
+         @(drv_inf.driver.cb)                                //driver interface is pointing to input driver clocking block
          drv_inf.driver.cb.data_in<=dut_packet.data_in;
          drv_inf.driver.cb.rst_in<=dut_packet.rst; 
          drv_inf.driver.cb.load_in<=dut_packet.load; 
