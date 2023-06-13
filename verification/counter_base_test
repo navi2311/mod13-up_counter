@@ -1,5 +1,5 @@
 //import package which has files of lower level 
-import counter_pkg::*;
+
 
 //test
 class counter_base_test extends uvn_test;
@@ -11,6 +11,7 @@ class counter_base_test extends uvn_test;
   //handles
   counter_envi env_h
   counter_config m_cfg;
+  counter_seq seq_h
   
   //build_phase
   function void build_phase(uvm_phase phase);
@@ -30,3 +31,15 @@ class counter_base_test extends uvn_test;
       //env handle object
       env_h=counter_envi::type_id::create("env_h",this);
   endfunction
+  
+  //runphase
+  task run_phase(uvm_phase phase)
+    //raisng objection 
+    phase.raise_objection(this);
+      //start sequnece using start method
+    seq_h=counter_seq::type_id::create(seq_h,this);
+    seq_h.start(env_h.agent1.seqrh) ;      //seq handle----start---path with handle names
+    #30;
+    phase.drop_objection(this);
+  endtask
+endclass
