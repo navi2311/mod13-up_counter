@@ -1,5 +1,5 @@
 //import package which has files of lower level 
-
+importcounter_pkg::*;
 
 //test
 class counter_base_test extends uvn_test;
