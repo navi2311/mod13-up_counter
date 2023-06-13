@@ -20,8 +20,7 @@ interface counter_if(input bit clock);
     default input #1 output #1;
     output rst;
     output data_in;
-    output dat
-    a_out;
+    output load;
   endclocking
   
   //clocking blocks input_monitor
@@ -29,7 +28,7 @@ interface counter_if(input bit clock);
   clocking input_mon_cb@(posedge clock);
   default input #1 output#1;
     input data_in;
-    input data_out;
+    input load;
     input rst;
   endclocking
   
