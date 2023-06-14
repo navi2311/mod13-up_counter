@@ -1,0 +1,68 @@
+// Code your design here
+//sb
+class counter_sb extends uvm_socreboard;
+  
+  //factory
+  'uvm_component_utils(counter_sb)
+  function new (string name="counter_sb",uvm_component_parent);
+    super.new(name,parent)
+  endfunction
+  
+  //ports
+  uvm_analysis_fifo#(counter_txn) input_mon_fifo;
+  uvm_analysis_fifo#(counter_txn) output_mon_fifo;
+  
+  //handle names
+  couter_txn input_mon_pkt;
+  counter_txn output_mon_pkt;
+  
+  counter_txn ex_out_pkt;
+ function new (string name="counter_sb",uvm_component_parent);
+    super.new(name,parent)
+   input_mon_fifo=new("input_mon_fifo",this);
+   output_mon_fifo=new("output_mon_fifo",this);
+   ex_out_pkt=counter_txn::type_id::create("ex_out_pkt",this);
+   
+  endfunction
+
+  //task
+  task run_phase(uvm_phase phase)
+    forever
+      begin
+        //get the packet 
+        input_mon_fifo.get(input_mon_fifo);
+        //message
+        output_mon_fifo.get(output_mon_pkt);
+        //message
+        //ref model logic
+        ref_model_logic();
+        //check output
+        check_output();
+      end
+  endtask
+  
+  //ref_model_logic
+  task ref_model_logic();
+  begin
+    //logic of desgin
+    if(input_mon_pkt.rst ||(input_mon_pkt.load&input_mon_pkt.data_in>=13))
+      ex_out_pkt.data_out=4'b0;
+    else if (input_mon_pkt.load)
+      ex_out_pkt.data_out=input_mon_pkt.data_in;
+    else if(input_mon_pkt.data_out>13)
+      ex_out_pkt=4'b0;
+    else
+      ex_out_pkt.data_out=ex_out_pkt_data_out+1'b1;
+  end
+  endtask
+  
+  //check output
+  task check_output();
+    if(!ex_out_pkt.compare(output_mon_pkt))
+      'uvm_info(get_type_name,"values",UVM_MEDIUM)
+      else
+         begin
+           'uvm_info(get_type_name(),"data match sucewsful",UVM_MEDIUM);
+         end
+  endtask
+endclass
